@@ -1,0 +1,24 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+/node_modules
+/vendor
+
+# Build files
+/public/hot
+/public/storage
+/storage/*.key
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+.continue/
