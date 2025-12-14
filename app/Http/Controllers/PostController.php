@@ -17,6 +17,7 @@ class PostController extends Controller
      */
     public function index()
     {
+
         //This method is a controller action that handles showing all posts
         // in your admin panel. index() is conventional name for "list all items".
         // Eager loading occurs here.
@@ -34,6 +35,11 @@ class PostController extends Controller
      */
     public function create()
     {
+        // Only users with 'create posts' permission can create
+        if(!auth()->user()->can('create posts')) {
+            abort(403, 'You do not have permission to create posts.');
+        }
+
         $categories = Category::all();
         $tags = Tag::all();
 
@@ -45,6 +51,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
+        if(!auth()->user()->can('create posts')) {
+            abort(403, 'You do not have permission to create posts.');
+        }
+
+
         //Validate the request
         $validated = $request->validate([
             'title' => 'required|max:255',
@@ -108,6 +120,10 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        if(!auth()->user()->can('edit posts')) {
+            abort(403, 'You do not have permission to edit posts.');
+        }
+
         $categories = Category::all();
         $tags = Tag::all();
 
@@ -180,6 +196,12 @@ class PostController extends Controller
         // ID = 5 and injects it into $post.
         public function destroy(Post $post)
         {
+            if (!auth()->user()->can('delete posts')) {
+                abort(403, 'You do not have permission to delete posts.');
+            }
+
+
+
             //calls Eloquent's delete() method.
             //this removes the record from the posts table in your database.
             // if you have relationships with onDelete('cascade'), related records
