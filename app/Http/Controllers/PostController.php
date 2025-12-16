@@ -8,7 +8,8 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-
+use App\Http\Requests\Post\StorePostRequest;
+use App\Http\Requests\Post\UpdatePostRequest;
 
 class PostController extends Controller
 {
@@ -48,11 +49,8 @@ class PostController extends Controller
     /**
      * Store new post
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-
-        $this->authorize('create', Post::class);
-
 
         //Validate the request
         $validated = $request->validate([
@@ -129,10 +127,8 @@ class PostController extends Controller
     /**
      * Update post
      */
-    public function update(Request $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
-        // Authorization check
-        $this->authorize('update', $post);
 
         $validated = $request->validate([
             'title' => 'required|max:255',

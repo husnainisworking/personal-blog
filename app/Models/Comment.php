@@ -12,7 +12,8 @@ class Comment extends Model
         'name',
         'email',
         'content',
-        'approved'
+        'approved',
+        'ip_address',
     ];
 
 
@@ -24,5 +25,16 @@ class Comment extends Model
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
+    }
+
+    // Scopes for easy querying
+    public function scopeApproved($query)
+    {
+        return $query->where('approved', true);
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('approved', false);
     }
 }

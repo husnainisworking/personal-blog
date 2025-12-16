@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tag;
 use Illuminate\Support\Str;
+use App\Http\Requests\Tag\StoreTagRequest;
+use App\Http\Requests\Tag\UpdateTagRequest;
 
 class TagController extends Controller
 {
@@ -37,13 +39,9 @@ class TagController extends Controller
     /**
      * Store new tag
      */
-    public function store(Request $request)
+    public function store(StoreTagRequest $request)
     {
-        $this->authorize('create', Tag::class);
-
-        $validated = $request->validate([
-           'name' => 'required|unique:tags|max:255'
-        ]);
+        $validated = $request->validated();
 
         $validated['slug'] = Str::slug($validated['name']);
 
@@ -68,13 +66,9 @@ class TagController extends Controller
     /**
      * Update an existing tag
      */
-    public function update(Request $request, Tag $tag)
+    public function update(UpdateTagRequest $request, Tag $tag)
     {
-        $this->authorize('update', $tag);
-
-        $validated = $request->validate([
-           'name' => 'required|max:255|unique:tags,name,' . $tag->id
-        ]);
+        $validated = $request->validated();
 
         $validated['slug'] = Str::slug($validated['name']);
 

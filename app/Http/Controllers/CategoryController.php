@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Str;
+use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\Category\UpdateCategoryRequest;
 
 
 class CategoryController extends Controller
@@ -38,14 +40,10 @@ class CategoryController extends Controller
     /**
      * Store new category
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $this->authorize('create', Category::class);
+       $validated = $request->validated();
 
-        $validated = $request->validate([
-           'name' => 'required|unique:categories|max:255',
-            'description' => 'nullable|max:1000'
-        ]);
         $validated['slug'] = Str::slug($validated['name']);
 
         //now going to insert new category into the database.
@@ -68,15 +66,9 @@ class CategoryController extends Controller
     /**
      * Update category. (Update an existing category)
      */
-    public function update(Request $request,  Category $category)
+    public function update(UpdateCategoryRequest $request,  Category $category)
     {
-        $this->authorize('update', $category);
-
-        $validated = $request->validate([
-           'name' => 'required|max: 255|unique:categories,name,'. $category->id,
-            //name must exist, < 255 chars, and unique (except for the current category being updated).
-            'description' => 'nullable|max:1000'
-        ]);
+        $validated = $request->validated();
 
         $validated['slug'] = Str::slug($validated['name']);
 
