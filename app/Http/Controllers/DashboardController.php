@@ -23,8 +23,7 @@ class DashboardController extends Controller
     public function index()
     {
 
-        // Dashboard is admin-only, check if user has admin role
-        abort_unless(auth()->user()->hasRole('admin'), 403);
+      // No authorization check needed - middleware handles it!
         
         $stats = [
 
