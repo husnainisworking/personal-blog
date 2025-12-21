@@ -23,14 +23,13 @@ class StoreTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:tags|max:255'
+            'name' => 'required|unique:tags|max:255',
         ];
     }
 
     /**
      * Get custom error messages for validation rules.
      */
-
     public function messages(): array
     {
         return [

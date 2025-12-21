@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Tag extends Model
 {
     protected $fillable = [
-      'name',
-      'slug'
+        'name',
+        'slug',
     ];
 
     // A tag belongs to many posts

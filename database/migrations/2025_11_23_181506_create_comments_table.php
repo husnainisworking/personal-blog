@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
-            $table->string('name'); //commenter's name
+            $table->string('name'); // commenter's name
             $table->string('email');
             $table->text('content');
             $table->boolean('approved')->default(false);
             $table->timestamps();
 
-            //for making searches, filter, join faster and indexing possible
+            // for making searches, filter, join faster and indexing possible
             $table->index('post_id');
             $table->index('approved');
         });

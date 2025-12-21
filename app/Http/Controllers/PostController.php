@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\Category;
-use App\Models\Tag;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Post\StorePostRequest;
 use App\Http\Requests\Post\UpdatePostRequest;
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\Tag;
 use App\Services\SlugService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,15 +21,15 @@ class PostController extends Controller
     {
         $this->authorize('viewAny', Post::class);
 
-        //This method is a controller action that handles showing all posts
+        // This method is a controller action that handles showing all posts
         // in your admin panel. index() is conventional name for "list all items".
         // Eager loading occurs here.
 
-            $posts = Post::with(['user', 'category', 'tags'])
-                ->latest() //orders posts by the newest first (usually by created_at)
-                ->paginate(10); //splits results into pages of 10 posts each, laravel automatically handles page links (?page=2, etc.).
+        $posts = Post::with(['user', 'category', 'tags'])
+            ->latest() // orders posts by the newest first (usually by created_at)
+            ->paginate(10); // splits results into pages of 10 posts each, laravel automatically handles page links (?page=2, etc.).
 
-            return view('posts.index', compact('posts'));
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -40,25 +38,23 @@ class PostController extends Controller
     public function trashed()
     {
         $this->authorize('viewAny', Post::class);
-        //This method shows all soft-deleted posts in the admin panel.
+        // This method shows all soft-deleted posts in the admin panel.
 
-        $posts = Post::onlyTrashed() 
-           ->with(['user' , 'category', 'tags'])
-           ->latest()
-           ->paginate(10);
-           
+        $posts = Post::onlyTrashed()
+            ->with(['user', 'category', 'tags'])
+            ->latest()
+            ->paginate(10);
+
         /** @phpstan-ignore-next-line */
-        return view ('posts.trashed', compact('posts'));
+        return view('posts.trashed', compact('posts'));
     }
-
-
 
     /**
      * Show create form
      */
     public function create()
     {
-       
+
         // NEW: Check permission
         $this->authorize('create', Post::class);
 
@@ -75,40 +71,36 @@ class PostController extends Controller
     {
         $validated = $request->validated();
 
-        //If validation fails -> Laravel automatically redirects back with errors.
-        //Add the user who created the post, get the currently logged-in user's ID.
+        // If validation fails -> Laravel automatically redirects back with errors.
+        // Add the user who created the post, get the currently logged-in user's ID.
         $validated['user_id'] = Auth::id();
-        //Generate a slug from the title, turns title into a URL-friendly string.
+        // Generate a slug from the title, turns title into a URL-friendly string.
 
         // Handle image upload
-        if ($request->hasFile('featured_image')){
+        if ($request->hasFile('featured_image')) {
             $validated['featured_image'] = $this->uploadImage($request->file('featured_image'));
         }
 
-         // Set published date if status is published
-                if($validated['status'] === 'published') {
-                    $validated['published_at'] = now();
-                }
+        // Set published date if status is published
+        if ($validated['status'] === 'published') {
+            $validated['published_at'] = now();
+        }
 
-
-
-        //Use atomic slug generation with database transaction
+        // Use atomic slug generation with database transaction
         $post = null;
         $slug = SlugService::generateWithRetry(
             $validated['title'],
             Post::class,
             null,
-            function($generatedSlug) use (&$validated, $request) {
+            function ($generatedSlug) use (&$validated, $request) {
                 $validated['slug'] = $generatedSlug;
 
-               
-
                 // Create post within the transaction
-                DB::transaction(function() use (&$validated, $request, &$post) {
+                DB::transaction(function () use (&$validated, $request, &$post) {
                     $post = Post::create($validated);
 
                     // Attach tags if provided
-                    if($request->has('tags')) {
+                    if ($request->has('tags')) {
                         $post->tags()->attach($request->tags);
                     }
                 });
@@ -119,16 +111,15 @@ class PostController extends Controller
             ->with('success', 'Post created successfully !');
     }
 
-
-
     /**
      * Public view of a single post
      */
     public function show(Post $post)
-    {   //Post $post -> laravel automatically injects the post you want to show
-        //(based on the route parameter, e.g. /posts/5).
+    {   // Post $post -> laravel automatically injects the post you want to show
+        // (based on the route parameter, e.g. /posts/5).
         $post->load(['user', 'category', 'tags', 'approvedComments']);
-        //eager loading
+
+        // eager loading
         return view('posts.show', compact('post'));
     }
 
@@ -163,14 +154,13 @@ class PostController extends Controller
         }
 
         // Handle new image upload
-        elseif ($request->hasFile('featured_image')){
+        elseif ($request->hasFile('featured_image')) {
             // Delete old image if exists
             if ($post->featured_image) {
                 $this->deleteImage($post->featured_image);
             }
             $validated['featured_image'] = $this->uploadImage($request->file('featured_image'));
         }
-
 
         // Use atomic slug generation for updates
         $validated['slug'] = SlugService::updateSlug(
@@ -179,13 +169,13 @@ class PostController extends Controller
             Post::class
         );
 
-        //Set published date if status changed to published
+        // Set published date if status changed to published
         if ($validated['status'] === 'published' && $post->status !== 'published') {
             $validated['published_at'] = now();
         }
 
         // Update within transaction
-        DB::transaction(function() use ($post, $validated, $request) {
+        DB::transaction(function () use ($post, $validated, $request) {
             $post->update($validated);
 
             // Sync tags
@@ -202,7 +192,6 @@ class PostController extends Controller
 
     }
 
-
     /**
      * Soft delete post (move to trash)
      */
@@ -216,18 +205,16 @@ class PostController extends Controller
             ->with('success', 'Post deleted successfully !');
     }
 
-
-
-    /** 
+    /**
      * Restore soft-deleted post
      */
     public function restore($id)
     {
-        $post = Post::onlyTrashed()->findOrFail($id); //find the soft-deleted post by ID, findOrFail throws 404 if not found.
+        $post = Post::onlyTrashed()->findOrFail($id); // find the soft-deleted post by ID, findOrFail throws 404 if not found.
 
         $this->authorize('restore', $post); // it checks if the user has permission to restore this post.
 
-        $post->restore(); //calls Eloquent's restore() method to un-delete the post.
+        $post->restore(); // calls Eloquent's restore() method to un-delete the post.
 
         return redirect()->route('posts.index')
             ->with('success', 'Post restored successfully !');
@@ -236,14 +223,13 @@ class PostController extends Controller
 
     /**
      * Permanently delete a soft-deleted post
-    */
+     */
     public function forceDelete($id)
     {
         $post = Post::onlyTrashed()->findOrFail($id);
         /**
          * onlyTrashed() retrieves only soft-deleted posts, $id is the post's ID.
          */
-
         $this->authorize('forceDelete', $post);
 
         // Delete image file before force deleting post
@@ -263,7 +249,7 @@ class PostController extends Controller
     private function uploadImage($image): string
     {
         // Generate unique filename with optional extension.
-        $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+        $filename = time().'-'.uniqid().'.'.$image->getClientOriginalExtension();
 
         // Store in storage/app/public/posts directory
         $path = $image->storeAs('posts', $filename, 'public');
@@ -274,12 +260,10 @@ class PostController extends Controller
     /**
      * Delete featured image from storage
      */
-    private function deleteImage(?string $path): void 
+    private function deleteImage(?string $path): void
     {
-        if($path && Storage::disk('public')->exists($path)) {
+        if ($path && Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);
         }
     }
-
-
 }

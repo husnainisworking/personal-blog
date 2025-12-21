@@ -41,14 +41,14 @@ class StoreCommentRequest extends FormRequest
                 'string',
                 'min:10',
                 'max:1000',
-            ]
-         ];
+            ],
+        ];
     }
+
     /**
      * Get custom error messages for validation rules.
      */
-
-    public function messages():array
+    public function messages(): array
     {
         return [
 
@@ -64,5 +64,4 @@ class StoreCommentRequest extends FormRequest
             'content.max' => 'Comment cannot exceed 1000 characters.',
         ];
     }
-
 }

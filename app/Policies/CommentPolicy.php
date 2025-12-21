@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Comment;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CommentPolicy
 {
@@ -24,8 +23,6 @@ class CommentPolicy
         return $user->can('approve comments');
     }
 
-    
-
     /**
      * Determine if user can delete comments.
      */
@@ -33,5 +30,4 @@ class CommentPolicy
     {
         return $user->can('delete comments');
     }
-
 }

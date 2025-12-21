@@ -28,7 +28,7 @@ class UpdatePostRequest extends FormRequest
             'excerpt' => 'nullable|max:500',
             'status' => 'required|in:draft,published',
             'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id'
+            'tags.*' => 'exists:tags,id',
         ];
     }
 
@@ -47,7 +47,7 @@ class UpdatePostRequest extends FormRequest
             'status.required' => 'The post status is required.',
             'status.in' => 'The post status must be either draft or published.',
             'tags.array' => 'Tags must be provided as an array.',
-            'tags.*.exists' => 'One or more selected tags do not exist.'
+            'tags.*.exists' => 'One or more selected tags do not exist.',
         ];
     }
 }

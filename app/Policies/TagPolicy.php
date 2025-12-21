@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Tag;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TagPolicy
 {
@@ -15,8 +14,6 @@ class TagPolicy
     {
         return $user->can('view tags');
     }
-
-    
 
     /**
      * Determine if user can create tags.
@@ -41,6 +38,4 @@ class TagPolicy
     {
         return $user->can('delete tags');
     }
-
-   
 }

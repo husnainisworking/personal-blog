@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Post;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Post;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StorePostRequest extends FormRequest
 {
@@ -31,7 +31,6 @@ class StorePostRequest extends FormRequest
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
 
-
             // Image upload validation
             'featured_image' => [
 
@@ -39,8 +38,8 @@ class StorePostRequest extends FormRequest
                 'image',
                 'mimes:jpeg,jpg,png,gif,webp',
                 'max:2048',
-                'dimensions:min_width=100,min_height=100,max-width=4000,max_height=4000'
-            ]
+                'dimensions:min_width=100,min_height=100,max-width=4000,max_height=4000',
+            ],
         ];
     }
 

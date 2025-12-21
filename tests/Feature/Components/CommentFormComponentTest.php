@@ -5,9 +5,8 @@ namespace Tests\Feature\Components;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class CommentFormComponentTest extends TestCase
 {
@@ -15,19 +14,19 @@ class CommentFormComponentTest extends TestCase
 
     private Post $post;
 
-   protected function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
-        
+
         $user = User::factory()->create();
         $this->post = Post::factory()->create([
 
             'user_id' => $user->id,
             'status' => 'published',
-            'slug' => 'et-aut-mollitia-eos-harum-sunt-eaque'
+            'slug' => 'et-aut-mollitia-eos-harum-sunt-eaque',
         ]);
     }
-    
+
     #[Test]
     public function it_renders_comment_form_with_all_required_fields()
     {
@@ -37,15 +36,16 @@ class CommentFormComponentTest extends TestCase
         );
 
         $view->assertSee('Leave a Comment')
-               ->assertSee('Name')
-               ->assertSee('Email')
-               ->assertSee('Comment')
-               ->assertSee('Post Comment')
-               ->assertSee('name="name"', false)
-               ->assertSee('name="email"', false)
-               ->assertSee('name="content"', false);
+            ->assertSee('Name')
+            ->assertSee('Email')
+            ->assertSee('Comment')
+            ->assertSee('Post Comment')
+            ->assertSee('name="name"', false)
+            ->assertSee('name="email"', false)
+            ->assertSee('name="content"', false);
 
     }
+
     #[Test]
     public function it_renders_with_custom_title()
     {
@@ -57,6 +57,7 @@ class CommentFormComponentTest extends TestCase
         $view->assertSee('Reply to this post.')
             ->assertDontSee('Leave a Comment');
     }
+
     #[Test]
     public function it_renders_with_custom_button_text()
     {
@@ -101,7 +102,7 @@ class CommentFormComponentTest extends TestCase
 
             '<x-comment-form :post="$post" :parentId="5" />',
             ['post' => $this->post]
-            
+
         );
 
         $view->assertSee('name="parent_id"', false)
@@ -122,19 +123,19 @@ class CommentFormComponentTest extends TestCase
     #[Test]
     public function it_displays_validation_errors()
     {
-      $view = $this->withViewErrors([
-        'name' => 'The name field is required.',
-        'email' => 'The email field is required.',
-        'content' => 'The content field is required.'
-      ])->blade(
-        '<x-comment-form :post="$post" />',
-        ['post' => $this->post]
-      );
+        $view = $this->withViewErrors([
+            'name' => 'The name field is required.',
+            'email' => 'The email field is required.',
+            'content' => 'The content field is required.',
+        ])->blade(
+            '<x-comment-form :post="$post" />',
+            ['post' => $this->post]
+        );
 
-      $view->assertSee('The name field is required.')
+        $view->assertSee('The name field is required.')
             ->assertSee('The email field is required.')
             ->assertSee('The content field is required.');
-        }
+    }
 
     #[Test]
     public function it_displays_success_message_from_session()
@@ -145,10 +146,9 @@ class CommentFormComponentTest extends TestCase
                 '<x-comment-form :post="$post" />',
                 ['post' => $this->post]
             );
-            $view->assertSee('Comment posted successfully!');
-        
-    }
+        $view->assertSee('Comment posted successfully!');
 
+    }
 
     #[Test]
     public function it_has_correct_form_action()
@@ -160,7 +160,7 @@ class CommentFormComponentTest extends TestCase
             ['post' => $this->post]
         );
 
-        $view->assertSee('action="' . $expectedRoute . '"', false);
+        $view->assertSee('action="'.$expectedRoute.'"', false);
     }
 
     #[Test]
@@ -172,11 +172,6 @@ class CommentFormComponentTest extends TestCase
                 ['post' => $this->post]
             );
 
-            $view->assertSee('border-red-500', false);
+        $view->assertSee('border-red-500', false);
     }
-
-
-    }
-
-
-
+}

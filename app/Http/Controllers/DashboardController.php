@@ -2,33 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\Comment;
 use App\Models\Category;
+use App\Models\Comment;
+use App\Models\Post;
 use App\Models\Tag;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     /**
      *  Display the admin dashboard with statistics.
-     * 
+     *
      *  URL: /dashboard
      *  Collect site statistics:
      *  Total comments, pending comments.
      *  Total categories, total tags.
      *  This is the admin overview page.
      */
-
     public function index()
     {
 
-      // No authorization check needed - middleware handles it!
-        
+        // No authorization check needed - middleware handles it!
+
         $stats = [
 
             'total_posts' => Post::count(),
-            'published_posts' =>Post::where('status', 'published')->count(),
+            'published_posts' => Post::where('status', 'published')->count(),
             'draft_posts' => Post::where('status', 'draft')->count(),
             'total_comments' => Comment::count(),
             'pending_comments' => Comment::where('approved', false)->count(),
@@ -38,5 +36,4 @@ class DashboardController extends Controller
 
         return view('dashboard', compact('stats'));
     }
-    
 }

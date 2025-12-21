@@ -15,12 +15,12 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect('/login');
         }
 
-        //Check if user has admin or super-admin role
-        if (!auth()->user()->hasAnyRole(['admin', 's'])) {
+        // Check if user has admin or super-admin role
+        if (! auth()->user()->hasAnyRole(['admin', 's'])) {
             abort(403, 'Unauthorized action. Admin access required.');
         }
 

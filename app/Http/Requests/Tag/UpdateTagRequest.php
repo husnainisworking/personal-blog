@@ -22,15 +22,15 @@ class UpdateTagRequest extends FormRequest
     public function rules(): array
     {
         $tagId = $this->route('tag')->id();
+
         return [
-            'name' => "required|max:255|unique:tags,name, {$tagId}"
+            'name' => "required|max:255|unique:tags,name, {$tagId}",
         ];
     }
 
     /**
      * Get custom error messages for validation rules.
      */
-
     public function messages(): array
     {
         return [

@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class PostPolicy
 {
@@ -41,7 +40,7 @@ class PostPolicy
     public function update(User $user, Post $post): bool
     {
         // Super admins and admins can delete any post
-        if($user->can('delete posts')) {
+        if ($user->can('delete posts')) {
             return true;
         }
 
@@ -56,16 +55,17 @@ class PostPolicy
     public function delete(User $user, Post $post): bool
     {
         // Super admins and admins can delete any post
-        if($user->can('delete posts')) {
+        if ($user->can('delete posts')) {
             return true;
         }
 
         // Users can delete their own posts(if they created it)
         return $user->id === $post->user_id;
     }
-   /**
-    * Determine if user can publish posts.
-    */
+
+    /**
+     * Determine if user can publish posts.
+     */
     public function publish(User $user): bool
     {
         return $user->can('publish posts');

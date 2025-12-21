@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ok, glad you are here
  * first we get a config instance, and set the settings
@@ -16,22 +17,20 @@
  * @link http://htmlpurifier.org/live/configdoc/plain.html
  */
 
-
-
 // This is HTMLPurifier configuration file used in Laravel.
 return [
-    'encoding'           => 'UTF-8',
-    'finalize'           => true,
-    'ignoreNonStrings'   => false,
-    'cachePath'          => storage_path('app/purifier'),
-    'cacheFileMode'      => 0755, // file permission for cache files.
-    'settings'      => [
+    'encoding' => 'UTF-8',
+    'finalize' => true,
+    'ignoreNonStrings' => false,
+    'cachePath' => storage_path('app/purifier'),
+    'cacheFileMode' => 0755, // file permission for cache files.
+    'settings' => [
         'default' => [
-            'HTML.Doctype'             => 'HTML 4.01 Transitional',
-            'HTML.Allowed'             => 'p,b,a[href],i,strong,em,br',
-            'CSS.AllowedProperties'    => '',
+            'HTML.Doctype' => 'HTML 4.01 Transitional',
+            'HTML.Allowed' => 'p,b,a[href],i,strong,em,br',
+            'CSS.AllowedProperties' => '',
             'AutoFormat.AutoParagraph' => true,
-            'AutoFormat.RemoveEmpty'   => true,
+            'AutoFormat.RemoveEmpty' => true,
         ],
 
         // Strict config for comments - NO HTML allowed

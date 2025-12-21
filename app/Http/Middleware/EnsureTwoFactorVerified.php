@@ -14,8 +14,8 @@ class EnsureTwoFactorVerified
         $user = Auth::user();
 
         // Skip check if on 2FA routes or login/logout
-        if ($request->routeIs('2fa.*') || 
-            $request->routeIs('login') || 
+        if ($request->routeIs('2fa.*') ||
+            $request->routeIs('login') ||
             $request->routeIs('logout')) {
             return $next($request);
         }
@@ -31,6 +31,7 @@ class EnsureTwoFactorVerified
                 $user->two_factor_expires_at = null;
                 $user->save();
                 Auth::logout();
+
                 return redirect()->route('login')->withErrors(['email' => 'Verification code expired.']);
             }
         }

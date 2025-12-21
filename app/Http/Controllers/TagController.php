@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Tag;
-use App\Services\SlugService;
 use App\Http\Requests\Tag\StoreTagRequest;
 use App\Http\Requests\Tag\UpdateTagRequest;
-use Illuminate\Support\Facades\DB;
 use App\Models\Post;
+use App\Models\Tag;
+use App\Services\SlugService;
+use Illuminate\Support\Facades\DB;
 
 class TagController extends Controller
 {
@@ -20,6 +19,7 @@ class TagController extends Controller
         $this->authorize('viewAny', Tag::class);
 
         $tags = Tag::withCount('posts')->get();
+
         // Tag::withCount('posts') -> Fetches all tags and adds a posts_count
         // column showing how many posts are linked to each tag.
         // get() -> Executes the query and returns a collection of Tag objects.
@@ -50,10 +50,10 @@ class TagController extends Controller
             $validated['name'],
             Tag::class,
             null,
-            function($generatedSlug) use (&$validated) {
+            function ($generatedSlug) use (&$validated) {
                 $validated['slug'] = $generatedSlug;
 
-                DB::transaction(function() use (&$validated) {
+                DB::transaction(function () use (&$validated) {
                     Tag::create($validated);
                 });
 
@@ -73,7 +73,7 @@ class TagController extends Controller
         $this->authorize('update', $tag);
 
         return view('tags.edit', compact('tag'));
-        //loads the Blade view tags/edit.blade.php
+        // loads the Blade view tags/edit.blade.php
         // passes the specific tag you want to edit.
     }
 
@@ -84,20 +84,19 @@ class TagController extends Controller
     {
         $validated = $request->validated();
 
-  
         // Use atomic slug generation for updates
         $validated['slug'] = SlugService::updateSlug(
-             $tag,
-             $validated['name'],
-             Tag::class
+            $tag,
+            $validated['name'],
+            Tag::class
         );
 
-        DB::transaction(function() use ($tag, $validated) {
+        DB::transaction(function () use ($tag, $validated) {
             $tag->update($validated);
         });
 
         return redirect()->route('tags.index')
-           ->with('success', 'Tag updated successfully!');
+            ->with('success', 'Tag updated successfully!');
 
     }
 
@@ -120,29 +119,22 @@ class TagController extends Controller
     public function show(Tag $tag)
     {
         $posts = Post::published()
-                ->whereHas('tags', function($query) use ($tag) {
-                    $query->where('tags.id', $tag->id);
-                })
-                ->with(['user', 'category'])
-                ->latest('published_at')
-                ->paginate(10);
+            ->whereHas('tags', function ($query) use ($tag) {
+                $query->where('tags.id', $tag->id);
+            })
+            ->with(['user', 'category'])
+            ->latest('published_at')
+            ->paginate(10);
 
         return view('tags.show', compact('tag', 'posts'));
-        //$tag->posts() Gets all posts linked to this tag.
-        //published() -> uses a local scope to only fetch posts with status = published.
-        //with(['user', 'category']) -> eager loads relationships (author and category) to avoid
+        // $tag->posts() Gets all posts linked to this tag.
+        // published() -> uses a local scope to only fetch posts with status = published.
+        // with(['user', 'category']) -> eager loads relationships (author and category) to avoid
         // N+1 queries.
         // latest('published_at) ->orders posts by newest published date.
         // paginate(10) ->splits results into pages of 10 pages each.
 
-        //View:
+        // View:
         // Passes both the tag and its posts to tags/show.blade.php
     }
-
-
-
-
-
-
-
 }

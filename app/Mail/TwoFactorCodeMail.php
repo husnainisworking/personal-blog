@@ -6,7 +6,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-
 /**
  * This class represents an EMAIL that will be sent
  * It extends Mailable, which is Laravel's base class for emails
@@ -61,8 +60,7 @@ class TwoFactorCodeMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Your Two-Factor Authentication Code') //Email subject
+        return $this->subject('Your Two-Factor Authentication Code') // Email subject
             ->view('emails.two_factor_code'); // Points to resources/views/emails/two_factor_code.blade.php
     }
-
 }

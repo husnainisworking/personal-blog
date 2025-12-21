@@ -16,7 +16,7 @@ class VerifyEmailController extends Controller
     {
         $user = $request->user();
 
-        if(!$user) {
+        if (! $user) {
             // If somehow no user is attached, redirect safely
             return redirect()->route('login');
         }

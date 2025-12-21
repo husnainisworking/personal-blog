@@ -2,63 +2,59 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 class RolePermissionSeeder extends Seeder
 {
-    
     public function run(): void
     {
-        //Reset cached roles and permissions
+        // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        //Create permissions
+        // Create permissions
         $permissions = [
-            //Posts
+            // Posts
             'view posts',
             'create posts',
             'edit posts',
             'delete posts',
             'publish posts',
 
-            //Categories
+            // Categories
             'view categories',
             'create categories',
             'edit categories',
             'delete categories',
 
-            //Tags
+            // Tags
             'view tags',
             'create tags',
             'edit tags',
             'delete tags',
 
-            //Comments
+            // Comments
             'view comments',
             'approve comments',
             'delete comments',
 
-            //System
+            // System
             'view dashboard',
             'manage users',
         ];
 
-        foreach ($permissions as $permission)
-        {
+        foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
 
         // Create roles and assign permissions
 
-        //1. Super Admin - Has all permissions
+        // 1. Super Admin - Has all permissions
         $superAdmin = Role::firstOrCreate(['name' => 'super-admin']);
         $superAdmin->syncPermissions(Permission::all());
 
-        //2. Admin - Can manage content but not users
+        // 2. Admin - Can manage content but not users
         $admin = Role::firstOrCreate(['name' => 'admin']);
         $admin->syncPermissions([
 
@@ -69,16 +65,16 @@ class RolePermissionSeeder extends Seeder
             'view dashboard',
         ]);
 
-        //3. Editor - Can create and edit posts but not delete
+        // 3. Editor - Can create and edit posts but not delete
         $editor = Role::firstOrCreate(['name' => 'editor']);
         $editor->syncPermissions([
-            'view posts', 'create posts', 'edit posts', 
+            'view posts', 'create posts', 'edit posts',
             'view categories', 'view tags',
             'view comments',
             'view dashboard',
         ]);
 
-        //4. Moderator - Can only manage comments
+        // 4. Moderator - Can only manage comments
         $moderator = Role::firstOrCreate(['name' => 'moderator']);
         $moderator->syncPermissions([
             'view posts', 'view categories', 'view tags',

@@ -24,7 +24,6 @@ return new class extends Migration
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
 
-
             // Add indexes for better search performance
             // Create indexes on slug, status, and published_at so searches and filters on these columns run faster.
             $table->index('slug');

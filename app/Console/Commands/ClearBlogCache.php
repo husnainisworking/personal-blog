@@ -2,13 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Services\CacheService;
+use Illuminate\Console\Command;
 
 class ClearBlogCache extends Command
 {
-    
-    protected $signature = 'blog:cache-clear {type?}'; 
+    protected $signature = 'blog:cache-clear {type?}';
     //  type can be 'all', 'posts', 'comments', 'tags'
 
     protected $description = 'Clear blog caches (posts, categories, tags, or all)';
@@ -22,14 +21,14 @@ class ClearBlogCache extends Command
         $type = $this->argument('type') ?? 'all';
         // This method clears cache based on the type argument.
 
-        match($type) {
+        match ($type) {
 
             'posts' => $this->clearPosts(),
             'categories' => $this->clearCategories(),
             'tags' => $this->clearTags(),
             'all' => $this->clearAll(),
-            default => $this->error("Invalid type. Use: posts, categories, tags, or all.")
-        }; 
+            default => $this->error('Invalid type. Use: posts, categories, tags, or all.')
+        };
     }
 
     private function clearPosts()
