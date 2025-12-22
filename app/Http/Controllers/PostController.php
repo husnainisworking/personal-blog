@@ -25,9 +25,11 @@ class PostController extends Controller
         // in your admin panel. index() is conventional name for "list all items".
         // Eager loading occurs here.
 
+        $perPage = config('pagination.posts');
+
         $posts = Post::with(['user', 'category', 'tags'])
             ->latest() // orders posts by the newest first (usually by created_at)
-            ->paginate(10); // splits results into pages of 10 posts each, laravel automatically handles page links (?page=2, etc.).
+            ->paginate($perPage); // splits results into pages of 10 posts each, laravel automatically handles page links (?page=2, etc.).
 
         return view('posts.index', compact('posts'));
     }
@@ -40,10 +42,12 @@ class PostController extends Controller
         $this->authorize('viewAny', Post::class);
         // This method shows all soft-deleted posts in the admin panel.
 
+        $perPage = config('pagination.posts');
+
         $posts = Post::onlyTrashed()
             ->with(['user', 'category', 'tags'])
             ->latest()
-            ->paginate(10);
+            ->paginate($perPage);
 
         /** @phpstan-ignore-next-line */
         return view('posts.trashed', compact('posts'));

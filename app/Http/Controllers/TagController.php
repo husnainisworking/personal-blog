@@ -118,13 +118,15 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
+        $perPage = config('pagination.tags');
+
         $posts = Post::published()
             ->whereHas('tags', function ($query) use ($tag) {
                 $query->where('tags.id', $tag->id);
             })
             ->with(['user', 'category'])
             ->latest('published_at')
-            ->paginate(10);
+            ->paginate($perPage);
 
         return view('tags.show', compact('tag', 'posts'));
         // $tag->posts() Gets all posts linked to this tag.

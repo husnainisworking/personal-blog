@@ -117,11 +117,13 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
+        $perPage = config('pagination.categories');
+
         $posts = Post::published() // get all posts linked to this category
             ->where('category_id', $category->id)
             ->with(['user', 'tags'])  // eager loads relationships (author and tags) to avoid N+1 queries.
             ->latest('published_at') // orders posts by newest published date
-            ->paginate(10); // splits results into pages of 10 posts each.
+            ->paginate($perPage); // splits results into pages of 10 posts each.
 
         /** @phpstan-ignore-next-line */
         return view('categories.show', compact('category', 'posts'));

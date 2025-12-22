@@ -33,7 +33,7 @@ class CommentController extends Controller
         // Step 3: Additional Security Checks
 
         // If URLs are NOT allowed AND a URL is found, then show error
-        if (! config('comments.spam_protection.allow_urls') &&
+        if (! config('comments.spam_prevention.allow_urls') &&
             preg_match('/\b(?:https?:\/\/|www\.)/i', $validated['content'])) {
             return back()
                 ->withInput()
@@ -149,7 +149,7 @@ class CommentController extends Controller
             $query->withTrashed(); // Include soft-deleted posts
         }])
             ->latest()
-            ->paginate(20);
+            ->paginate($perPage);
 
         return view('comments.index', compact('comments'));
         // with('post') -> Loads the related post for each comment (so you know

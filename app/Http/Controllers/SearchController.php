@@ -18,6 +18,8 @@ class SearchController extends Controller
     {
         $query = $request->input('q');
 
+        $perPage = config('pagination.search');
+
         $posts = Post::published()
             ->where(function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
@@ -27,7 +29,7 @@ class SearchController extends Controller
             })
             ->with(['user', 'category', 'tags'])
             ->latest('published_at')
-            ->paginate(10);
+            ->paginate($perPage);
 
         return view('search', compact('posts', 'query'));
     }

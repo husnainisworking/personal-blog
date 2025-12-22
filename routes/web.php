@@ -96,7 +96,7 @@ Route::middleware(['auth'])->group(function () {
 // All routs inside this group require the user to be logged in (auth middleware).
 // if not authenticated -> redirected to login.
 // FIXED: Removed 'admin' middleware - authorization now handled by policies in controllers
-Route::middleware(['auth', '2fa.verified', 'role.admin'])->group(function () {
+Route::middleware(['auth', '2fa.verified', 'role:admin'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     /**

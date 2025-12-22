@@ -20,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
             '2fa.verified' => EnsureTwoFactorVerified::class,
             'admin' => \App\Http\Middleware\IsAdmin::class,
             'spam' => \App\Http\Middleware\ProtectAgainstSpam::class,
+            // Add Spatie middleware aliases
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
