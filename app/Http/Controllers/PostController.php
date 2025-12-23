@@ -98,14 +98,11 @@ class PostController extends Controller
         $post = null;
         try {
             // Use generateWithRetry WITHOUT the callback
-            $slug = SlugService::generateWithRetry(
+            $validated['slug'] = SlugService::generateUniqueSlug(
                 $validated['title'],
-                Post::class,
-                null,
-                null
+                Post::class
             );
-            DB::transaction(function () use (&$validated, $request, &$post, $slug) {
-                $validated['slug'] = $slug;
+            DB::transaction(function () use (&$validated, $request, &$post) {
 
                 $post = Post::create($validated);
 
