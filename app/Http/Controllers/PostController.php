@@ -8,11 +8,13 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Services\SlugService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use RuntimeException;
 
 class PostController extends Controller
 {
@@ -94,27 +96,44 @@ class PostController extends Controller
 
         // Use atomic slug generation with database transaction
         $post = null;
-        $slug = SlugService::generateWithRetry(
-            $validated['title'],
-            Post::class,
-            null,
-            function ($generatedSlug) use (&$validated, $request) {
-                $validated['slug'] = $generatedSlug;
+        try {
+            // Use generateWithRetry WITHOUT the callback
+            $validated['slug'] = SlugService::generateUniqueSlug(
+                $validated['title'],
+                Post::class
+            );
+            DB::transaction(function () use (&$validated, $request, &$post) {
 
-                // Create post within the transaction
-                DB::transaction(function () use (&$validated, $request, &$post) {
-                    $post = Post::create($validated);
+                $post = Post::create($validated);
 
-                    // Attach tags if provided
-                    if ($request->has('tags')) {
-                        $post->tags()->attach($request->tags);
-                    }
-                });
-            }
-        );
+                // Attach tags if provided
+                if ($request->has('tags')) {
+                    $post->tags()->attach($request->tags);
+                }
+            });
+        } catch (QueryException $e) {
+            \Log::error('Database error while creating post', [
+                'title' => $validated['title'],
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->withInput()->withErrors([
+                'error' => 'Database error occurred. Please try again.',
+            ]);
+        } catch (RuntimeException $e) {
+            \Log::error('Slug generation failed', [
+                'title' => $validated['title'],
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->withInput()->withErrors([
+                'error' => 'Could not generate a unique slug. Please try again.',
+            ]);
+        }
 
         return redirect()->route('posts.index')
             ->with('success', 'Post created successfully !');
+
     }
 
     /**

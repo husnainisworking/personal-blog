@@ -20,7 +20,7 @@
                         </h2>
 
                         <div class="flex items-center text-sm text-gray-600 mb-4">
-                            <span>{{$post->user->name}}</span>
+                            <span>{{$post->user?->name ?? 'Unknown Author'}}</span>
                             <span class="mx-2">•</span>
                             <span>{{$post->published_at->format('F d, Y')}}</span>
                             @if($post->category)

@@ -8,7 +8,7 @@
         <h1 class="text-4xl font-bold text-gray-900 mb-4">{{$post->title}}</h1>
 
         <div class="flex items-center text-sm text-gray-600 mb-4">
-            <span>By {{$post->user->name}}</span>
+            <span>By {{$post->user?->name ?? "Unknown"}}</span>
             <span class="mx-2">•</span>
             <span>{{$post->published_at->format('F d, Y')}}</span>
             @if($post->category)

@@ -35,9 +35,7 @@ class SlugService
                     $query->where('id', '!=', $excludeId);
                 }
 
-                $exists = $query->exists();
-
-                if (! $exists) {
+                if (! $query->exists()) {
                     return $slug;
                 }
 
