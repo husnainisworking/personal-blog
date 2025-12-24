@@ -20,7 +20,7 @@
             @foreach($category->posts as $post)
                 <div class="border rounded-lg p-6 hover:shadow-lg transition">
                     <h4 class="text-lg font-bold text-gray-800 mb-2">
-                        <a href="{{ route('posts.show', $post)}}" class="hover:underline">
+                        <a href="{{ route('posts.public.show', $post->slug)}}" class="hover:underline">
                             {{ $post->title}}
 </a>
 </h4>
@@ -28,11 +28,11 @@
     {{ Str::limit($post->content, 100)}}
 </p>
 <div class="flex space-x-3">
-    <a href="{{ route('posts.edit', $post) }}"
+    <a href="{{ route('admin.posts.edit', $post) }}"
     class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
         Edit
 </a>
-<form action="{{ route('posts.destroy', $post)}}" method="POST" class="inline">
+<form action="{{ route('admin.posts.destroy', $post)}}" method="POST" class="inline">
     @csrf
     @method('DELETE')
     <button type="submit"
