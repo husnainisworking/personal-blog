@@ -25,6 +25,12 @@
                         <a href="{{route('home')}}" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">
                             Home
                         </a>
+                        <a href="{{ route('public.categories.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                            Categories
+                        </a>
+                        <a href="{{ route('public.tags.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                            Tags
+                        </a>
                     </div>
                 </div>
                 <div class="flex flex-col gap-2 w-full sm:w-auto sm:flex-row sm:items-center">

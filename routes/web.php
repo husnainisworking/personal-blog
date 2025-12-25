@@ -7,6 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicCategoryController;
+use App\Http\Controllers\PublicTagController;
 use App\Http\Controllers\RssFeedController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SitemapController;
@@ -23,6 +25,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
  * Sends data to welcome.blade.php
  * This is blog's homepage showing the latest posts.
  */
+
+// Public index pages (browse)
+Route::get('/categories', [PublicCategoryController::class, 'index'])->name('public.categories.index');
+Route::get('/tags', [PublicTagController::class, 'index'])->name('public.tags.index');
 
 // Public blog post view
 Route::get('/posts/{post:slug}', [PostController::class, 'show'])
