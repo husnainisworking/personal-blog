@@ -14,9 +14,9 @@
     <nav class="bg-white shadow">
         <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
             <div class="flex flex-col gap-3 py-3 sm:flex-row sm:justify-between sm:items-center sm:h-16">
-                <div class="flex min-w-0">
+                <div class="flex min-w-0 justify-center sm:justify-start">
                     <div class="flex-shrink-0 flex items-center">
-                        <a href="{{ route('home') }}" class="text-lg sm:text-2xl font-bold text-indigo-600 truncate max-w-[11rem] sm:max-w-none">
+                        <a href="{{ route('home') }}" class="text-lg sm:text-2xl font-bold text-indigo-600 truncate max-w-[11rem] sm:max-w-none text-center">
                             My Personal Blog
                         </a>
                     </div>
