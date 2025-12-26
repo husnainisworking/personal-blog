@@ -66,11 +66,7 @@
 </a>
 @endrole
 @endauth
-<button type="button"
-        onclick="history.length > 1 ? history.back() : window.location.href='{{ route('public.categories.index') }}'"
-        class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">
-        Back
-</button>
+<x-back-link :fallback="route('public.categories.index')" />
 </div>
 </div>
 @endsection

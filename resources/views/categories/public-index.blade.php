@@ -6,11 +6,7 @@
     <div class="mb-8">
         <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 mb-2">Categories</h1>
         <p class="text-gray-600">Browse posts by category</p>
-        <button type="button"
-                onclick="history.length > 1 ? history.back() : window.location.href='{{ route('home') }}'"
-                class="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-800 mt-2">
-                ← Back
-        </button>
+     <x-back-link />
 </div>
 
 @if($categories->count() > 0)

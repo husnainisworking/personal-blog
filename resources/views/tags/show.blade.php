@@ -5,11 +5,7 @@
     <div class="mb-8">
         <h1 class="text-4xl font-bold text-gray-900">#{{$tag->name}}</h1>
         <p class="text-gray-600 mt-2">{{$posts->total()}} posts tagged with this</p>
-        <button type="button"
-                onclick="history.length > 1 ? history.back() : window.location.href='{{ route('public.tags.index') }}'"
-                class="inline-flex items-center text-sm text-indigo-600 hover:text-indigo-800 mt-2">
-                    ← Back
-</button>
+<x-back-link : fallback="route('public.tags.index')" />
     </div>
 
     @if($posts->count() > 0)
