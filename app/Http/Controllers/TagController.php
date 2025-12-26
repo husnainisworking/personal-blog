@@ -126,7 +126,7 @@ class TagController extends Controller
             ->whereHas('tags', function ($query) use ($tag) {
                 $query->where('tags.id', $tag->id);
             })
-            ->with(['user', 'category'])
+            ->with(['user', 'category', 'tags'])
             ->latest('published_at')
             ->paginate($perPage);
 

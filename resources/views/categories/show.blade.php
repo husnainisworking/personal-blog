@@ -1,72 +1,85 @@
-{{-- resource/views/categories/show.blade.php --}}
+{{-- resources/views/categories/show.blade.php --}}
 @extends('layouts.public')
 
 @section('title', $category->name)
 
 @section('content')
-<div class="bg-white shadow rounded-lg">
-    <div class="p-6 border-b">
-        <h2 class="text-2xl font-bold text-gray-800">{{ $category->name }}</h2>
-        @if($category->description)
-            <p class="text-gray-600 mt-2">{{$category->description}}</p>
+        <div class="mb-8">
+            <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 mb-2">{{$category->name}}</h1>
+        
+            @if($category->description)
+                <p class="text-gray-600">{{ $category->description }}</p>
             @endif
+
+            <p class="text-gray-500 text-sm mt-1">Found {{ $posts->total() }} post(s)</p>
+
+            <div class="mt-2">
+                <x-back-link :fallback="route('public.categories.index')" />
 </div>
 
-<div class="p-6">
-    <h3 class="text-xl font-semibold mb-4">Posts in this category</h3>
-
-    @if($posts->count() > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach($posts as $post)
-                <div class="border rounded-lg p-6 hover:shadow-lg transition">
-                    <h4 class="text-lg font-bold text-gray-800 mb-2">
-
-                        <a href="{{ route('posts.public.show', $post->slug)}}" class="hover:underline">
-                            {{ $post->title}}
-</a>
-</h4>
-<p class="text-gray-600 text-sm mb-4">
-    {{ Str::limit($post->content, 100)}}
-</p>
-<div class="flex space-x-3">
-    @auth
-        @role('admin')
-    <a href="{{ route('posts.edit', $post) }}"
-    class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
-        Edit
-</a>
-
-
-<form action="{{ route('posts.destroy', $post)}}" method="POST" class="inline">
-    @csrf
-    @method('DELETE')
-    <button type="submit"
-                        class="text-red-600 hover:text-red-800 text-sm font-medium"
-                        onclick="return confirm('Delete this post?')">
-                        Delete
-</button>
-</form>
+            @auth
+                @role('admin')
+                    <div class="mt-4">
+                        <a href="{{ route('categories.edit', $category) }}"
+                        class="inline-flex items-center bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                        Edit category
+                    </a>
+</div>
 @endrole
 @endauth
 </div>
+            @if($posts->count() > 0)
+                <div class="grid gap-8">
+                    @foreach($posts as $post)
+                        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+                            <div class="p-5 sm:p-6">
+                                <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                                    <a href="{{ route('posts.public.show', $post->slug) }}" class="hover:text-indigo-600">
+                                        {{ $post->title }}
+                                    </a>
+                                </h2>
+
+                                <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-600 mb-4">
+                                    <span>{{ $post->user?->name ?? 'Unknown'}}</span>
+                                    <span class="mx-2">•</span>
+                                    <span>{{ $post->published_at->format('F d, Y')}}</span>
+                                </div>
+
+                                @if($post->excerpt)
+                                    <p class="text-gray-700 mb-4">{{$post->excerpt}}</p>
+                                @else
+                                    <p class="text-gray-700 mb-4">{{ Str::limit(strip_tags($post->content), 200)}}</p>
+                                @endif
+                                
+                                @if($post->tags->count() > 0)
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        @foreach($post->tags as $tag)
+                                            <a href="{{ route('tags.show', $tag->slug) }}"
+                                            class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm hover:bg-gray-300">
+                                            #{{ $tag->name }}
+                                        </a>
+                                        @endforeach
 </div>
+@endif
+
+<a href="{{ route('posts.public.show', $post->slug) }}"
+class="text-indigo-600 hover:text-indigo-800 font-medium">
+Read more →
+</a>
+</div>
+</article>
 @endforeach
 </div>
-@else
-    <p class="text-gray-500 text-center py-8">No posts yet in this category.</p>
-    @endif
-</div>
 
-<div class="p-6 border-t flex space-x-4">
-    @auth
-    @role('admin')
-    <a href="{{ route('categories.edit', $category) }}"
-    class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
-    Edit category
-</a>
-@endrole
-@endauth
-<x-back-link :fallback="route('public.categories.index')" />
+<div class="mt-8">
+    {{ $posts->links() }}
 </div>
-</div>
+@else
+
+    <p class="text-gray-500 text-center py-12">No posts yet in this category.</p>
+    @endif
 @endsection
+
+
+                                
+

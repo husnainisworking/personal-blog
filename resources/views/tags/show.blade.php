@@ -1,12 +1,16 @@
 @extends('layouts.public')
-@section('title' , '#', $tag->name)
+@section('title' , '#'.$tag->name)
 @section('content')
     <!-- Public-facing page for a tag -->
     <div class="mb-8">
-        <h1 class="text-4xl font-bold text-gray-900">#{{$tag->name}}</h1>
-        <p class="text-gray-600 mt-2">{{$posts->total()}} posts tagged with this</p>
-<x-back-link :fallback="route('public.tags.index')" />
-    </div>
+        <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 mb-2">#{{ $tag->name }}</h1>
+        <p class="text-gray-500 text-sm">Found {{ $posts->total() }} post(s)</p>
+
+        <div class="mt-2">
+            <x-back-link :fallback="route('public.tags.index')" />
+</div>
+</div>
+
 
     @if($posts->count() > 0)
         <div class="grid gap-8">
@@ -33,6 +37,8 @@
 
                         @if($post->excerpt)
                             <p class="text-gray-700 mb-4">{{$post->excerpt}}</p>
+                        @else
+                            <p class="text-gray-700 mb-4">{{ Str::limit(strip_tags($post->content), 200) }}</p>
                         @endif
 
                     <a href="{{route('posts.public.show', $post->slug)}}" class="text-indigo-600 hover:text-indigo-800 font-medium">
