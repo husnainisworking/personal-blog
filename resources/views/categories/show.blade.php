@@ -42,7 +42,7 @@
                                 <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-600 mb-4">
                                     <span>{{ $post->user?->name ?? 'Unknown'}}</span>
                                     <span class="mx-2">•</span>
-                                    <span>{{ $post->published_at->format('F d, Y')}}</span>
+                                    <span>{{ optional($post->published_at)->format('F d, Y') }}</span>
                                 </div>
 
                                 @if($post->excerpt)
@@ -55,7 +55,7 @@
                                     <div class="flex flex-wrap gap-2 mb-4">
                                         @foreach($post->tags as $tag)
                                             <a href="{{ route('tags.show', $tag->slug) }}"
-                                            class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm hover:bg-gray-300">
+                                            class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-300">
                                             #{{ $tag->name }}
                                         </a>
                                         @endforeach

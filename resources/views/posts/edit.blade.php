@@ -38,17 +38,20 @@
         <div class="mb-3">
                 <img src="{{ asset('storage/' . $post->featured_image) }}"
                 alt="Current featured image"
-                class="img-thumbnail"
-                style="max-width: 300px;">
+                class="w-full max-w-sm rounded-md border border-gray-200"
+                >
 
-                <div class="form-check mt-2">
-                    <input type="checkbox" class="form-check-input"
-                        id="remove_featured_image" name="remove_featured_image" value="1">
-                    <label class="form-check-label" for="remove_featured_image">
-                        Remove current image
+                <label class="mt-3 inline-flex items-center gap-2">
+                    <input type="checkbox" 
+                        id="remove_featured_image" 
+                        name="remove_featured_image" 
+                        value="1"
+                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        >
+                    <span class="text-sm text-gray-700 leading-none">
+                        Remove current image</span>
         </label>    
     </div>
-</div>
         @endif
 
         <!-- New image upload field -->
@@ -99,24 +102,23 @@
             </div>
         </div>
             <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+               
                     @foreach($tags as $tag)
-                        <label class="flex items-center">
-                            <input type="checkbox" name="tags[]" value="{{$tag->id}}"
-                                   {{in_array($tag->id, old('tags', $post->tags->pluck('id')->toArray())) ? 'checked' : ''}}
-                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                            <span class="ml-2 text-sm text-gray-700">{{$tag->name}}</span>
-                        </label>
+                         <label class="inline-flex items-center gap-2">
+                <input type="checkbox" name="tags[]" value="{{ $tag->id }}"
+                        {{ in_array($tag->id, old('tags', $post->tags->pluck('id')->toArray())) ? 'checked' : '' }}
+                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">   
+                <span class="text-sm leading-none text-gray-700">{{$tag->name}}</span>
+                </label>
                     @endforeach
                 </div>
             </div>
 
             <div class="flex space-x-4">
-                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700">
+                <button type="submit" class="inline-flex items-center justify-center h-10 min-w-[140px] px-5 rounded bg-indigo-600 text-white hover:bg-indigo-700  ">
                     Update Post
                 </button>
-                <a href="{{route('posts.index')}}" class="bg-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-400">
+                <a href="{{route('posts.index')}}" class="inline-flex items-center justify-center h-10 min-w-[140px] px-5 rounded bg-gray-300 text-gray-700 hover:bg-gray-400    ">
                     Cancel
                 </a>
             </div>

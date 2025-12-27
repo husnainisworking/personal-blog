@@ -21,19 +21,18 @@
                     class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{old('excerpt')}}</textarea>
             <p class="text-sm text-gray-500 mt-1">Short description (optional)</p>
         </div>
-        <div class="mb-3">
-            <label for="featured_image" class="form-label">Featured Image</label>
-            <input type="file"
-                class="form-control @error('featured_image') is-invalid @enderror"
+        <div class="mb-6">
+            <label for="featured_image" class="block text-sm font-medium text-gray-700 mb-2">Featured Image</label>
+            <input 
+                type="file"
                 id="featured_image"
                 name="featured_image"
-                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
-
-            @error('featured_image')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                class="block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-medium file:text-gray-700 hover:file:bg-gray-200
+                @error('featured_image') border border-red-500 rounded-md p-1 @enderror"
+               /> 
             
-            <small class="text-muted">Max 2MB. Formats: JPEG, PNG, GIF, WebP</small>
+            <p  class="text-sm text-gray-500 mt-1">Max 2MB. Formats: JPEG, PNG, GIF, WebP</p>
         </div>
 
         <div>
@@ -70,21 +69,21 @@
              <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
              <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
                  @foreach($tags as $tag)
-                     <label class="flex items-center">
+                     <label class="inline-flex items-center gap-2">
                          <input type="checkbox" name="tags[]" value="{{$tag->id}}"
                                 {{in_array($tag->id, old('tags', [])) ? 'checked' : ''}}
-                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                         <span class="ml-2 text-sm text-gray-700">{{$tag->name}}</span>
+                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                         <span class="text-sm leading-none text-gray-700">{{$tag->name}}</span>
                      </label>
                      @endforeach
              </div>
          </div>
 
          <div class="flex space-x-4">
-             <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700">
+             <button type="submit" class="inline-flex items-center justify-center h-10 min-w-[140px] px-5 rounded bg-indigo-600 text-white hover:bg-indigo-700">
                  Create Post
              </button>
-             <a href="{{route('posts.index')}}" class="bg-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-400">
+             <a href="{{route('posts.index')}}" class="inline-flex items-center justify-center h-10 min-w-[140px] px-5 rounded bg-gray-300 text-gray-700 hover:bg-gray-400">
                  Cancel
              </a>
          </div>

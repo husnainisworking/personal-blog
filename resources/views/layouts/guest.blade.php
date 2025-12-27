@@ -5,7 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <link rel="icon" type="image/jpeg" href="{{asset('build/assets/123.jpg')}}">
+        <link rel="icon" href="{{ asset('favicon.ico') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+
 
         <title>{{ config('app.name', 'My Personal Blog') }}</title>
 
@@ -14,6 +18,15 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
+        <script> 
+        (() => {
+            const stored = localStorage.getItem('theme');
+            const prefersDark = 
+                window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const useDark = stored ? stored === 'dark' : prefersDark;
+            document.documentElement.classList.toggle('dark', useDark);
+         }) ();
+         </script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">

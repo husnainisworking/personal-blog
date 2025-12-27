@@ -9,6 +9,16 @@
     -->
     <title>@yield('title', 'Welcome') - My Personal Blog </title>
     <link rel="alternate" type="application/rss+xml" title="My Personal Blog" href="{{ url('/feed.xml') }}">
+    <script>
+        (() => {
+            // Prevents a flash of light mode before JS loads
+            const stored = localStorage.getItem('theme'); // 'dark' | 'light' | null
+            const prefersDark = 
+                window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const useDark = stored ? stored === 'dark' : prefersDark;
+            document.documentElement.classList.toggle('dark', useDark);
+        }) ();
+        </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
@@ -40,6 +50,20 @@
                             Search
                         </button>
                     </form>
+                    <button
+                        type="button"
+                         class="inline-flex min-w-[6rem] items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        x-data
+                        @click="$store.theme.toggle()" 
+                    >
+
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                         <path d="M21.64 13a1 1 0 0 0-1.05-.14A8 8 0 0 1 11.14 3.4a1 1 0 0 0-1.19-1.19A10 10 0 1 0 22 14.05a1 1 0 0 0-.36-1.05Z"/>
+    </svg>
+                    
+                    <span class="theme-label-dark">Dark</span>
+                    <span class="theme-label-light">Light</span>
+                    </button>    
                     @auth
                         <a href="{{route('dashboard')}}" class="sm:ml-4 text-gray-500 hover:text-gray-700 text-sm font-medium">
                             Admin

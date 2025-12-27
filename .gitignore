@@ -24,3 +24,10 @@ Thumbs.db
 .continue/
 storage/framework/sessions/*
 .phpunit.result.cache
+
+
+/.github/agents/
+/docker/
+/public/favicon/
+/config/scout.php
+/app/View/Components/back-link.php

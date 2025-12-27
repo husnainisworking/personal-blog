@@ -1,3 +1,140 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+
+    /* Makes input/scrollbars use dark palette in supporting browsers */
+    html.dark {
+        color-scheme: dark;
+    }
+
+    /* Base pages colors */
+    html.dark body {
+        @apply bg-gray-900 text-gray-100;
+    }
+
+    /* 
+        "Global" remaps: when a component uses bg-white/text-gray-900/etc,
+        it will look dark automatically if .dark is on 
+    */
+
+    html.dark .bg-white {
+        @apply bg-gray-800;
+    }
+
+    html.dark .bg-gray-50 {
+        @apply bg-gray-900;
+    }
+
+    html.dark .bg-gray-100 {
+        @apply bg-gray-900;
+    }
+
+    html.dark .bg-gray-200 {
+        @apply bg-gray-700;
+    }
+
+    html.dark .bg-gray-300 {
+        @apply bg-gray-600;
+    }
+
+    html.dark .bg-blue-50 {
+        @apply bg-blue-900/20;
+    }
+
+    html.dark .bg-green-50 {
+        @apply bg-green-900/20;
+    }
+
+    html.dark .bg-yellow-50 {
+        @apply bg-yellow-900/20;
+    }
+
+    html.dark .bg-red-50 {
+        @apply bg-red-900/20;
+    }
+
+    html.dark .bg-purple-50 {
+        @apply bg-purple-900/20;
+    }
+
+    html.dark .bg-indigo-50 {
+        @apply bg-indigo-900/20;
+    }
+
+    html.dark .bg-pink-50 {
+        @apply bg-pink-900/20;
+    }
+
+    html.dark .text-gray-900 {
+        @apply text-gray-100;
+    }
+
+    html.dark .text-gray-800 {
+        @apply text-gray-100;
+    }
+
+    html.dark .text-gray-700 {
+        @apply text-gray-200;
+    }
+
+    html.dark .text-gray-600 {
+        @apply text-gray-300;
+    }
+
+    html.dark .text-gray-500 {
+        @apply text-gray-400;
+    }
+
+    html.dark .border-gray-100 {
+        @apply border-gray-800;
+    }
+
+    html.dark .border-gray-200 {
+        @apply border-gray-800;
+    }
+
+    html.dark .border-gray-300 {
+        @apply border-gray-700;
+    }
+
+    .theme-label-light {
+        display: none;
+    }
+
+    html.dark .theme-label-dark {
+        display: none;
+    }
+
+    html.dark .theme-label-light {
+        display: inline;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    html.dark .hover\:bg-gray-50:hover {
+        @apply bg-gray-800;
+    }
+
+    html.dark .hover\:bg-gray-100:hover {
+        @apply bg-gray-800;
+    }
+
+    html.dark .hover\:text-gray-700:hover {
+        @apply text-gray-200;
+    }
+
+    html.dark .hover\:text-gray-800:hover {
+        @apply text-gray-100;
+    }
+
+    html.dark .shadow,
+    html.dark .shadow-md,
+    html.dark .shadow-lg,
+    html.dark .shadow-xl {
+        @apply shadow-none ring-1 ring-gray-700/50;
+    }
+}

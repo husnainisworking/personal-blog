@@ -8,7 +8,7 @@
             {{ __('Manage Comments')}}
         </h2>
    <a href="{{ route('comments.trashed') }}"
-   style="background:#f59e0b;color:#fff" class="inline-flex items-center px-4 py-2 rounded-md shadow">
+    class="inline-flex items-center px-4 py-2 rounded-md bg-amber-500 text-white font-medium shadow hover:bg-amber-600">
     View Trashed Comments
 </a>
 

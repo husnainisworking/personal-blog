@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" href="{{asset('build/assets/123.jpg')}}">
+    <link rel="icon" href="{{asset('favicon.ico')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+
     <title>@yield('title', 'Admin') - My Personal Blog </title>
+    <script>
+    (() => {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = 
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const useDark = stored ? stored === 'dark' : prefersDark;
+        document.documentElement.classList.toggle('dark', useDark);
+    }) ();
+    </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!--
     This is admin layout template. All admin pages extend this so they
@@ -28,30 +41,43 @@
                         -->
                     </div>
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="{{ route('dashboard') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-2 pt-1 border-b-2 text-sm font-medium transition duration-150 ease-in-out">
+                        <a href="{{ route('dashboard') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-2 py-2 border-b-2 text-sm font-medium transition duration-150 ease-in-out">
                             Dashboard
                         </a>
-                        <a href="{{ route('posts.index') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-2 pt-1 border-b-2 text-sm font-medium transition duration-150 ease-in-out">
+                        <a href="{{ route('posts.index') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-2 py-2 border-b-2 text-sm font-medium transition duration-150 ease-in-out">
                             Posts
                         </a>
-                        <a href="{{ route('categories.index') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-2 pt-1 border-b-2 text-sm font-medium transition duration-150 ease-in-out">
+                        <a href="{{ route('categories.index') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-2 py-2 border-b-2 text-sm font-medium transition duration-150 ease-in-out">
                             Categories
                         </a>
-                        <a href="{{ route('tags.index') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-2 pt-1 border-b-2 text-sm font-medium transition duration-150 ease-in-out">
+                        <a href="{{ route('tags.index') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-2 py-2 border-b-2 text-sm font-medium transition duration-150 ease-in-out">
                             Tags
                         </a>
-                        <a href="{{ route('comments.index') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-2 pt-1 border-b-2 text-sm font-medium transition duration-150 ease-in-out">
+                        <a href="{{ route('comments.index') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-2 py-2 border-b-2 text-sm font-medium transition duration-150 ease-in-out">
                             Comments
                         </a>
                     </div>
                 </div>
+
                 <div class="flex items-center space-x-4">
-                    <a href="{{ route('home') }}" target="_blank" class="text-gray-500 hover:text-gray-700 text-sm font-medium">
+                    <button 
+                    type="button"
+                    class="inline-flex items-center gap-2 px-2 py-2 text-sm font-medium text-gray-500 hover:text-gray-700"
+                    x-data
+                    @click="$store.theme.toggle()"
+                >
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M21.64 13a1 1 0 0 0-1.05-.14A8 8 0 0 1 11.14 3.4a1 1 0 0 0-1.19-1.19A10 10 0 1 0 22 14.05a1 1 0 0 0-.36-1.05Z"/>
+            </svg>
+                <span class="theme-label-dark">Dark</span>
+                <span class="theme-label-light">Light</span>
+            </button>
+                    <a href="{{ route('home') }}" target="_blank" class="inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">
                         View Site
                     </a>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form class="inline-flex" method="POST" action="{{ route('logout') }}">
                         @csrf
-                    <button type="submit" class="text-gray-500 hover:text-gray-700 text-sm font-medium">
+                    <button type="submit" class="inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">
                         Logout
                     </button>
                     </form>
